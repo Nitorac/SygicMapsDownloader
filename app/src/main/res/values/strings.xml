@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">  Carte Sygic</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Paramètres</string>
+
+    <string name="start_all">Commencer le téléchargement</string>
+    <string name="cancel_all">Annuler le téléchargement</string>
+
+</resources>
