@@ -17,9 +17,9 @@ public class Arrays {
     public static String[] country_code_as = {};
     public static Integer[] flag_as = {};
 
-    public static String[] country_eu = {"Albanie","Andorre"};
-    public static String[] country_code_eu = {"alb","and"};
-    public static Integer[] flag_eu = {R.mipmap.albania, R.mipmap.andorra};
+    public static String[] country_eu = {"Albanie",         "Andorre",        "Autriche"      ,"Biélorussie",    "Belgique",       "Bosnie Herzégovine",   "Bulgarie",        "Croatie",        "Chypre"};
+    public static String[] country_code_eu = {"alb",               "and",          "aut",          "blr",        "bel",                 "bih",                "bgr",          "hrv",            "cyp"};
+    public static Integer[] flag_eu = {R.mipmap.albania, R.mipmap.andorra, R.mipmap.austria, R.mipmap.belarus, R.mipmap.belgium, R.mipmap.bosniaherze, R.mipmap.bulgaria,R.mipmap.croatia,R.mipmap.cyprus};
 
     public static String[] country_mo = {};
     public static String[] country_code_mo = {};

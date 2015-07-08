@@ -129,10 +129,10 @@ public class NetworkLoop extends AsyncTask<Void, Void, String[]> {
                                         Intent intent = new Intent(screen, DownloaderActivity.class);
                                         Bundle b = new Bundle();
                                         b.putString("month", date_arr[0]);
-                                        b.putString("year", date_arr[1]); //Your id
+                                        b.putString("year", date_arr[1]);
                                         intent.putExtras(b); //Put your id to your next Intent
                                         screen.startActivity(intent);
-                                        dialog.dismiss();
+                                        screen.finish();
                                     }
                                 })
 

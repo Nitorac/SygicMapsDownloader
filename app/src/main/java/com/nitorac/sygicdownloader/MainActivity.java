@@ -12,6 +12,8 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -36,8 +38,12 @@ public class MainActivity extends ActionBarActivity {
     public static int year_maj = 0;
     public String[] maj_list;
 
+    public String pass_continent;
+    public String pass_country;
+    public String pass_country_code;
+    public int pass_flag;
+
     public ListView listView;
-    private ProgressDialog processDialogLoading;
 
     public TextView lastMAJ;
 
@@ -59,16 +65,12 @@ public class MainActivity extends ActionBarActivity {
 
         lastMAJ = (TextView) findViewById(R.id.lastMaj);
 
-        if (savedInstanceState != null) {
-            maj_list = savedInstanceState.getStringArray("maj_list");
-            setListAdapter(maj_list);
-        }
-        if(continent_chosen.isEmpty())
-            getContinent();
-
-
+        Bundle b = getIntent().getExtras();
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setLogo(R.mipmap.ic_launcher);
+
+            getContinent();
+            actionBar.setLogo(R.mipmap.ic_launcher);
+
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
@@ -133,6 +135,11 @@ public class MainActivity extends ActionBarActivity {
             Toast.makeText(this, "Pays : " + country_chosen, Toast.LENGTH_LONG).show();
             int flagIcon = data.getIntExtra("FLAG", R.mipmap.ic_launcher);
             String name_country = data.getStringExtra("NAME");
+
+            pass_country = name_country;
+            pass_country_code = country_chosen;
+            pass_flag = flagIcon;
+
             getSupportActionBar().setLogo(flagIcon);
             getSupportActionBar().setTitle("  " + name_country + " : Cartes Sygic");
             }catch(Exception e){
