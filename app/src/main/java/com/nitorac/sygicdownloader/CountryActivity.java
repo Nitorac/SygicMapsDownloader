@@ -1,9 +1,13 @@
 package com.nitorac.sygicdownloader;
 
+import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,55 +16,80 @@ import android.widget.TextView;
 
 import com.nitorac.sygicdownloader.liststartitems.Arrays;
 import com.nitorac.sygicdownloader.liststartitems.Items;
+import com.nitorac.sygicdownloader.liststartitems.ListStartAdapter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Nitorac.
  */
-public class CountryActivity extends ListStartActivity {
+public class CountryActivity extends ListActivity {
 
     private String[] country;
     private String[] country_code;
     private Integer[] flag;
+    public Arrays array;
 
-    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        array = new Arrays(getApplicationContext());
+        otherCode();
+        ListStartAdapter adapter = new ListStartAdapter(this, generateData());
+        adapter.sort(new Comparator<Items>() {
+            @Override
+            public int compare(Items lhs, Items rhs) {
+                return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        });
+        setListAdapter(adapter);
+    }
+
     public void otherCode(){
         switch(MainActivity.continent_chosen){
             case "Africa":
-                country = Arrays.country_af;
-                country_code = Arrays.country_code_af;
-                flag = Arrays.flag_af;
+                country = array.country_af;
+                country_code = array.country_code_af;
+                flag = array.flag_af;
                 break;
             case "Asia":
-                country = Arrays.country_as;
-                country_code = Arrays.country_code_as;
-                flag = Arrays.flag_as;
+                country = array.country_as;
+                country_code = array.country_code_as;
+                flag = array.flag_as;
                 break;
+            case "Australia":
+                country = array.country_aus;
+                country_code = array.country_code_aus;
+                flag = array.flag_aus;
+                break;
+
             case "Europe":
-                country = Arrays.country_eu;
-                country_code = Arrays.country_code_eu;
-                flag = Arrays.flag_eu;
+                country = array.country_eu;
+                country_code = array.country_code_eu;
+                flag = array.flag_eu;
                 break;
             case "MiddleEast":
-                country = Arrays.country_mo;
-                country_code = Arrays.country_code_mo;
-                flag = Arrays.flag_mo;
+                country = array.country_mo;
+                country_code = array.country_code_mo;
+                flag = array.flag_mo;
                 break;
             case "NorthAmerica":
-                country = Arrays.country_adn;
-                country_code = Arrays.country_code_adn;
-                flag = Arrays.flag_adn;
+                country = array.country_adn;
+                country_code = array.country_code_adn;
+                flag = array.flag_adn;
                 break;
             case "SouthAmerica":
-                country = Arrays.country_ads;
-                country_code = Arrays.country_code_ads;
-                flag = Arrays.flag_ads;
+                country = array.country_ads;
+                country_code = array.country_code_ads;
+                flag = array.flag_ads;
                 break;
+            default:
+                country = array.error_country;
+                country_code = array.error_country_code;
+                flag = array.error_flag;
         }
     }
 
-    @Override
     public ArrayList<Items> generateData(){
         ArrayList<Items> items = new ArrayList<Items>();
         for(int i = 0; i< country.length;i++) {

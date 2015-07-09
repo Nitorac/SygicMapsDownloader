@@ -1,17 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="country_eu">
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-        <item>Albanie</item>
-    </array>
+    <string-array name="continent">
+        <item>Africa</item>
+        <item>Asia</item>
+        <item>Oceania</item>
+        <item>Europe</item>
+        <item>Middle East</item>
+        <item>North America</item>
+        <item>South America</item>
+    </string-array>
+
+    <string-array name="country_eu">
+        <item>Albania</item>
+        <item>Andorra</item>
+        <item>Austria</item>
+        <item>Belarus</item>
+        <item>Belgium</item>
+        <item>Bosnia and Herzegovina</item>
+        <item>Bulgaria</item>
+        <item>Croatia</item>
+        <item>Cyprus</item>
+        <item>Czech Republic</item>
+        <item>Denmark</item>
+        <item>Estonia</item>
+        <item>Finland</item>
+        <item>France</item>
+        <item>Germany</item>
+        <item>Gibraltar</item>
+        <item>Greece</item>
+        <item>Hungary</item>
+        <item>Ireland</item>
+        <item>Italy</item>
+        <item>Latvia</item>
+        <item>Liechtenstein</item>
+        <item>Lithuania</item>
+        <item>Luxembourg</item>
+        <item>Malta</item>
+        <item>Monaco</item>
+        <item>Montenegro</item>
+        <item>Netherlands</item>
+        <item>Norway</item>
+        <item>Poland</item>
+        <item>Portugal</item>
+        <item>Moldova</item>
+        <item>Romania</item>
+        <item>Russian Federation</item>
+        <item>San Marino</item>
+        <item>Serbia</item>
+        <item>Slovakia</item>
+        <item>Slovenia</item>
+        <item>Spain</item>
+        <item>Sweden</item>
+        <item>Switzerland</item>
+        <item>Macedonia</item>
+        <item>Turkey</item>
+        <item>Ukraine</item>
+        <item>United Kingdom</item>
+        <item>Vatican</item>
+    </string-array>
 </resources>

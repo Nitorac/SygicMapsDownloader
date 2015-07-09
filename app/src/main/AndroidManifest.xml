@@ -23,11 +23,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ListStartActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" >
-        </activity>
-        <activity
             android:name=".ContinentActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >

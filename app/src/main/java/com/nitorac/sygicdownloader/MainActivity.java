@@ -1,12 +1,10 @@
 package com.nitorac.sygicdownloader;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -15,9 +13,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,10 +36,8 @@ public class MainActivity extends ActionBarActivity {
     public static int year_maj = 0;
     public String[] maj_list;
 
-    public String pass_continent;
     public String pass_country;
     public String pass_country_code;
-    public int pass_flag;
 
     public ListView listView;
 
@@ -126,16 +119,14 @@ public class MainActivity extends ActionBarActivity {
         {
             try {
             continent_chosen = data.getStringExtra("CONTINENT");
-            Toast.makeText(this,"Continent : " + continent_chosen,Toast.LENGTH_LONG).show();
             }catch(Exception e){
-                Toast.makeText(this,"Failed !",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
             if(!continent_chosen.isEmpty())
                 getCountry();
         }else if(requestCode==2) {
             try {
             country_chosen = data.getStringExtra("COUNTRY");
-            Toast.makeText(this, "Pays : " + country_chosen, Toast.LENGTH_LONG).show();
             Bitmap flagIcon = data.getParcelableExtra("FLAG");
             String name_country = data.getStringExtra("NAME");
 

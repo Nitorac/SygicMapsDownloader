@@ -1,36 +1,50 @@
 package com.nitorac.sygicdownloader;
 
-import android.app.Application;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.nitorac.sygicdownloader.ListStartActivity;
-import com.nitorac.sygicdownloader.MainActivity;
 import com.nitorac.sygicdownloader.liststartitems.Arrays;
 import com.nitorac.sygicdownloader.liststartitems.Items;
+import com.nitorac.sygicdownloader.liststartitems.ListStartAdapter;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Nitorac.
  */
-public class ContinentActivity extends ListStartActivity{
+public class ContinentActivity extends ListActivity {
 
-        public static Bitmap fake = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+    public static Bitmap fake = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+    public Context c;
 
-        @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle);
+        c = getApplicationContext();
+        ListStartAdapter adapter = new ListStartAdapter(this, generateData());
+        adapter.sort(new Comparator<Items>() {
+            @Override
+            public int compare(Items lhs, Items rhs) {
+                return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        });
+        setListAdapter(adapter);
+    }
+
         public ArrayList<Items> generateData(){
+
+            Arrays array = new Arrays(c);
             ArrayList<Items> items = new ArrayList<Items>();
-            for(int i = 0; i< Arrays.continent.length;i++) {
-                items.add(new Items(Arrays.continent[i], Arrays.continent_code[i], fake));
+            for(int i = 0; i< array.continent.length;i++) {
+                items.add(new Items(array.continent[i], array.continent_code[i], fake));
             }
             return items;
         }
