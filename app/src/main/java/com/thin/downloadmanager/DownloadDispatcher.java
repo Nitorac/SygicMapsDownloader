@@ -171,12 +171,11 @@ public class DownloadDispatcher extends Thread {
                     updateDownloadFailed(HTTP_INTERNAL_ERROR, conn.getResponseMessage());
                     break;
                 default:
-                    updateDownloadFailed(DownloadManager.ERROR_UNHANDLED_HTTP_CODE, "Unhandled HTTP response:" + responseCode +" message:" +conn.getResponseMessage());
+                    updateDownloadFailed(DownloadManager.ERROR_UNHANDLED_HTTP_CODE, responseCode +" " +conn.getResponseMessage() + ", common for many countries");
                     break;
             }
         } catch(SocketTimeoutException e) {
             e.printStackTrace();
-            // Retry.
             attemptRetryOnTimeOutException();
         } catch (ConnectTimeoutException e) {
             e.printStackTrace();

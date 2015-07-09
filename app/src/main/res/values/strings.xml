@@ -10,7 +10,7 @@
     <string name="duplicatedMaps">More than 2 maps of the same country</string>
     <string name="noMaps">No map found for this country</string>
     <string name="mapDetectUpdate">Last map update : </string>
-    <string name="quitMessage">Do you really wat to quit this app ?</string>
+    <string name="quitMessage">Do you really want to quit this app ?</string>
     <string name="quitTitle">Exit</string>
     <string name="cancel">Cancel</string>
     <string name="sygicMapTitle">Sygic Map</string>
