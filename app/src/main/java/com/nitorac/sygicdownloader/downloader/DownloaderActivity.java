@@ -25,7 +25,6 @@ import com.thin.downloadmanager.ThinDownloadManager;
 import java.io.File;
 import java.util.ArrayList;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 public class DownloaderActivity extends Activity {
 
     private ThinDownloadManager downloadManager;

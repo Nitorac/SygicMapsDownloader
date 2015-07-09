@@ -33,7 +33,7 @@
     <string name="canceled">Annulé</string>
     <string name="downloadCanceled">Téléchargement annulé</string>
     <string name="downloadSuccess">Téléchargement achevé</string>
-    <string name="downloadSuccessMessage">Le téléchargement s'est terminé avec succès.\nVoulez-vous quitter l'application ?</string>
+    <string name="downloadSuccessMessage">Le téléchargement s\'est terminé avec succès.\nVoulez-vous quitter l\'application ?</string>
     <string name="no">Non</string>
     <string name="finished">Terminé avec succès !</string>
     <string name="unexpectedError">Erreur inattendue</string>
