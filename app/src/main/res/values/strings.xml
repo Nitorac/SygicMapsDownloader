@@ -30,5 +30,15 @@
     <string name="downloadStarting">Starting</string>
     <string name="downloadInitialisation">Initialisation ...</string>
     <string name="updateChoose">Choose update :</string>
+    <string name="waiting">Waiting</string>
+    <string name="canceled">Canceled</string>
+    <string name="downloadCanceled">Download canceled</string>
+    <string name="downloadSuccess">Download finished</string>
+    <string name="downloadSuccessMessage">The download was completed successfully.\nDo you want to quit this app ?</string>
+    <string name="no">No</string>
+    <string name="finished">Successfully completed !</string>
+    <string name="unexpectedError">Unexpected Error</string>
+    <string name="expectedError">Expected error</string>
+    <string name="commonCountries">, common for many countries</string>
 
 </resources>

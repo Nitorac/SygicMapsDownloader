@@ -29,4 +29,14 @@
     <string name="downloadStarting">Début</string>
     <string name="downloadInitialisation">Initialisation ...</string>
     <string name="updateChoose">Choisir la mise à jour :</string>
+    <string name="waiting">En attente</string>
+    <string name="canceled">Annulé</string>
+    <string name="downloadCanceled">Téléchargement annulé</string>
+    <string name="downloadSuccess">Téléchargement achevé</string>
+    <string name="downloadSuccessMessage">Le téléchargement s'est terminé avec succès.\nVoulez-vous quitter l'application ?</string>
+    <string name="no">Non</string>
+    <string name="finished">Terminé avec succès !</string>
+    <string name="unexpectedError">Erreur inattendue</string>
+    <string name="expectedError">Erreur attendue</string>
+    <string name="commonCountries">, normal pour plusieurs pays</string>
 </resources>

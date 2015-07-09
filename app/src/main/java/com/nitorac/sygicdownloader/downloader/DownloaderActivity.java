@@ -16,15 +16,16 @@ import android.widget.TextView;
 import com.nitorac.sygicdownloader.MainActivity;
 import com.nitorac.sygicdownloader.R;
 import com.thin.downloadmanager.DefaultRetryPolicy;
+import com.thin.downloadmanager.DownloadManager;
 import com.thin.downloadmanager.DownloadRequest;
 import com.thin.downloadmanager.DownloadStatusListener;
 import com.thin.downloadmanager.RetryPolicy;
 import com.thin.downloadmanager.ThinDownloadManager;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class DownloaderActivity extends Activity {
 
     private ThinDownloadManager downloadManager;
@@ -101,7 +102,6 @@ public class DownloaderActivity extends Activity {
         }
 
         downloadManager = new ThinDownloadManager(DOWNLOAD_THREAD_POOL_SIZE);
-        RetryPolicy retryPolicy = new DefaultRetryPolicy();
 
         String filesDir = sygicSearch() + "/Sygic/Maps";
         final File filesDirFile = new File(filesDir);
@@ -111,8 +111,6 @@ public class DownloaderActivity extends Activity {
         }
 
         final File mapDir = new File(filesDir + "/" + MainActivity.country_chosen + "." + MainActivity.prefix + "." + year_usable + "." + month_usable);
-
-        String mapDirCountry = mapDir.getPath() + "/" + MainActivity.country_chosen + ".";
 
         mStartAll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,12 +149,13 @@ public class DownloaderActivity extends Activity {
                 try {
                     downloadManager.cancelAll();
                 } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                String errorCode = "1001";
-                String errorMessage = "Téléchargement annulé";
+                String errorMessage = str(R.string.downloadCanceled);
+
                 for(int i = 0;i<mProgressTxt.size();i++){
-                    mProgressTxt.get(i).setText("Erreur Normale | " + MainActivity.country_chosen + "." + s[i] + " : " + errorCode + ", " + errorMessage);
-                    mProgressTxt.get(i).setTextColor(getResources().getColor(R.color.Error));
+                    mProgressTxt.get(i).setText(str(R.string.canceled) +" | " + MainActivity.country_chosen + "." + s[i] + " : " + errorMessage);
+                    mProgressTxt.get(i).setTextColor(getResources().getColor(R.color.ErrorNormale));
                 }
                 for(int i = 0;i<mProgress.size();i++) {
                     mProgress.get(i).setProgress(0);
@@ -169,8 +168,9 @@ public class DownloaderActivity extends Activity {
                 finish();
             }
         });
+
         for(int i = 0; i<mProgressTxt.size();i++) {
-            mProgressTxt.get(i).setText("En attente | " + MainActivity.country_chosen + "." + s[i] + " : ...");
+            mProgressTxt.get(i).setText(str(R.string.waiting) + " | " + MainActivity.country_chosen + "." + s[i] + " : ...");
         }
 
         Log.i("RootPath", sygicSearch());
@@ -195,8 +195,8 @@ public class DownloaderActivity extends Activity {
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
                 if (!success) {
                     return false;
                 }
@@ -235,12 +235,12 @@ public class DownloaderActivity extends Activity {
 
     public void showAlert(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Téléchargement réussi");
+        alertDialogBuilder.setTitle(str(R.string.downloadSuccess));
         alertDialogBuilder.setIcon(R.drawable.ic_finished);
         alertDialogBuilder
-                .setMessage("Le téléchargement s'est terminé avec succès.\nVoulez-vous quitter l'application ?")
+                .setMessage(str(R.string.downloadSuccessMessage))
                 .setCancelable(false)
-                .setPositiveButton("Oui",
+                .setPositiveButton(str(R.string.quitTitle),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 moveTaskToBack(true);
@@ -249,7 +249,7 @@ public class DownloaderActivity extends Activity {
                             }
                         })
 
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                .setNegativeButton(str(R.string.no), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Intent i = new Intent(DownloaderActivity.this, MainActivity.class);
                         startActivity(i);
@@ -267,7 +267,7 @@ public class DownloaderActivity extends Activity {
 
         @Override
         public void onDownloadComplete(int id) {
-            mProgressTxt.get(id - 1).setText(MainActivity.country_chosen + "." + s[id-1] + " : Terminé !");
+            mProgressTxt.get(id - 1).setText(MainActivity.country_chosen + "." + s[id - 1] + " : " + str(R.string.finished));
             mProgressTxt.get(id - 1).setTextColor(getResources().getColor(R.color.Finished));
 
             if (id == lastDownloadId) {
@@ -277,9 +277,15 @@ public class DownloaderActivity extends Activity {
 
         @Override
         public void onDownloadFailed(int id, int errorCode, String errorMessage) {
-                mProgressTxt.get(id-1).setText("Erreur Normale | " + MainActivity.country_chosen + "." + s[id-1] + " : " + "(" + errorMessage + ")");
-                mProgressTxt.get(id-1).setTextColor(getResources().getColor(R.color.Error));
-                mProgress.get(id-1).setProgress(100);
+            if(errorCode == DownloadManager.ERROR_UNHANDLED_HTTP_CODE) {
+                mProgressTxt.get(id - 1).setText(str(R.string.expectedError) + " | " + MainActivity.country_chosen + "." + s[id - 1] + " (" + errorMessage + str(R.string.commonCountries) +")");
+                mProgressTxt.get(id - 1).setTextColor(getResources().getColor(R.color.ErrorNormale));
+                mProgress.get(id - 1).setProgress(100);
+            }else{
+                mProgressTxt.get(id - 1).setText(str(R.string.unexpectedError) + " | " + MainActivity.country_chosen + "." + s[id - 1] + " : " + errorCode + " ; " + errorMessage);
+                mProgressTxt.get(id - 1).setTextColor(getResources().getColor(R.color.Error));
+                mProgress.get(id - 1).setProgress(0);
+            }
 
             if (id == lastDownloadId) {
                 DownloaderActivity.this.showAlert();

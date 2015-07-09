@@ -3,7 +3,8 @@
     <color name="Black">#000000</color>
     <color name="BlackBlue">#ff010092</color>
     <color name="Finished">#ff00b508</color>
-    <color name="Error">#ff3471da</color>
+    <color name="Error">#ffff1a11</color>
+    <color name="ErrorNormale">#ff3471da</color>
     <color name="Blue">#ff128eeb</color>
     <color name="LightBlue">#ff5cc5ff</color>
     <color name="GreyNoFlash">#ffe7e7e7</color>

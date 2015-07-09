@@ -3,6 +3,8 @@ package com.thin.downloadmanager;
 import android.os.Process;
 import android.util.Log;
 
+import com.nitorac.sygicdownloader.R;
+
 import org.apache.http.conn.ConnectTimeoutException;
 
 import java.io.File;
@@ -171,7 +173,7 @@ public class DownloadDispatcher extends Thread {
                     updateDownloadFailed(HTTP_INTERNAL_ERROR, conn.getResponseMessage());
                     break;
                 default:
-                    updateDownloadFailed(DownloadManager.ERROR_UNHANDLED_HTTP_CODE, responseCode +" " +conn.getResponseMessage() + ", common for many countries");
+                    updateDownloadFailed(DownloadManager.ERROR_UNHANDLED_HTTP_CODE, responseCode +" " +conn.getResponseMessage());
                     break;
             }
         } catch(SocketTimeoutException e) {
