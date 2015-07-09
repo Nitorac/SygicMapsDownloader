@@ -102,13 +102,10 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public boolean checkBeforeAfter(int year, int month, int defYear, int defMonth) {
-            if(year > defYear){
-                return true;
-            }else if(year == defYear){
-                return month > defMonth;
-            }else{
-                return false;
-            }
+        if (year > defYear) {
+            return true;
+        } else
+            return year == defYear && month > defMonth;
     }
 
     @Override
@@ -134,7 +131,7 @@ public class MainActivity extends ActionBarActivity {
             pass_country_code = country_chosen;
 
             getSupportActionBar().setLogo(new BitmapDrawable(getResources(), flagIcon));
-            getSupportActionBar().setTitle("  " + name_country + " : Cartes Sygic");
+            getSupportActionBar().setTitle(" " + name_country + " : " + str(R.string.sygicMapTitle));
             }catch(Exception e){
                 Toast.makeText(this,"Failed !",Toast.LENGTH_LONG).show();
                 e.printStackTrace();
@@ -199,13 +196,13 @@ public class MainActivity extends ActionBarActivity {
         }
         if(results.size() > 1){
             lastMAJ.setTextColor(getResources().getColor(R.color.Error));
-            lastMAJ.setText("Plus de 2 cartes du même pays !");
+            lastMAJ.setText(str(R.string.duplicatedMaps));
         }else if(results.size() == 0){
             lastMAJ.setTextColor(getResources().getColor(R.color.Blue));
-            lastMAJ.setText("Aucune carte existante de ce pays");
+            lastMAJ.setText(str(R.string.noMaps));
         }else if(results.size() == 1) {
             lastMAJ.setTextColor(getResources().getColor(R.color.Finished));
-            lastMAJ.setText("Date de la carte : " + results.get(0));
+            lastMAJ.setText(str(R.string.mapDetectUpdate) + " " + results.get(0));
             String[] maj = results.get(0).split("/");
             month_maj = Integer.parseInt(maj[0]);
             year_maj = Integer.parseInt(maj[1]);
@@ -219,15 +216,19 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    public String str(int id){
+        return getResources().getString(id);
+    }
+
     @Override
     public void onBackPressed(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Quitter l'application ?");
+        alertDialogBuilder.setTitle(str(R.string.quitTitle));
         alertDialogBuilder.setIcon(R.drawable.ic_action_name);
         alertDialogBuilder
-                .setMessage("Voulez-vous vraiment quitter l'application ?")
+                .setMessage(str(R.string.quitMessage))
                 .setCancelable(false)
-                .setPositiveButton("Oui",
+                .setPositiveButton(str(R.string.quitTitle),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 moveTaskToBack(true);
@@ -236,9 +237,8 @@ public class MainActivity extends ActionBarActivity {
                             }
                         })
 
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                .setNegativeButton(str(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         dialog.cancel();
                     }
                 });

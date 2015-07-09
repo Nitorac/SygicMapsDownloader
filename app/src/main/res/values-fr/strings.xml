@@ -1,9 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Carte Sygic</string>
+    <string name="app_name">Cartes Sygic</string>
     <string name="action_settings">Paramètres</string>
     <string name="cancel_all">Annuler le téléchargement</string>
     <string name="title_activity_settings">Paramètres</string>
     <string name="start_all">Commencer le téléchargement</string>
     <string name="hello_world">Test</string>
+    <string name="duplicatedMaps">Plus de 2 cartes du même pays !</string>
+    <string name="noMaps">Aucune carte existante de ce pays</string>
+    <string name="mapDetectUpdate">Date de la carte :</string>
+    <string name="quitMessage">Voulez-vous vraiment quitter l\'application ?</string>
+    <string name="quitTitle">Quitter</string>
+    <string name="cancel">Annuler</string>
+    <string name="sygicMapTitle">Carte Sygic</string>
+    <string name="code">Code</string>
+    <string name="updateGetting">Récupération des mises à jour\nVeuillez attendre ...</string>
+    <string name="confirmation">Confirmation</string>
+    <string name="updateMessage">Vous avez choisi la mise à jour du %s.\nVoulez-vous la télécharger ?</string>
+    <string name="download">Télécharger</string>
+    <string name="monthPrefSummary">Entrez un mois entre 1 et 12\nMois de départ actuel : </string>
+    <string name="yearPrefSummary">Entrez une année depuis 2000\nAnnée de départ actuelle :</string>
+    <string name="invalidInput">Entrée invalide</string>
+    <string name="monthPrefOutBounds">Mois hors-limites !</string>
+    <string name="yearPrefOutBounds">Année hors-limites !</string>
+    <string name="prefUpdateDetectionTitle">Détéction des mises à jour</string>
+    <string name="month">Mois</string>
+    <string name="year">Année</string>
+    <string name="downloadStarting">Début</string>
+    <string name="downloadInitialisation">Initialisation ...</string>
+    <string name="updateChoose">Choisir la mise à jour :</string>
 </resources>

@@ -118,15 +118,19 @@ public class CountryActivity extends ListActivity {
         finish();
     }
 
+    public String str(int id){
+        return getResources().getString(id);
+    }
+
     @Override
     public void onBackPressed(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("Quitter l'application ?");
+        alertDialogBuilder.setTitle(str(R.string.quitTitle));
         alertDialogBuilder.setIcon(R.drawable.ic_action_name);
         alertDialogBuilder
-                .setMessage("Voulez-vous vraiment quitter l'application ?")
-                .setCancelable(true)
-                .setPositiveButton("Oui",
+                .setMessage(str(R.string.quitMessage))
+                .setCancelable(false)
+                .setPositiveButton(str(R.string.quitTitle),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 moveTaskToBack(true);
@@ -135,9 +139,8 @@ public class CountryActivity extends ListActivity {
                             }
                         })
 
-                .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                .setNegativeButton(str(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         dialog.cancel();
                     }
                 });

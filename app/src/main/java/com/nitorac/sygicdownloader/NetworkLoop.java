@@ -36,13 +36,15 @@ public class NetworkLoop extends AsyncTask<Void, Void, String[]> {
     private volatile MainActivity screen;
     private ProgressDialog progress;
 
+    public String str(int id){return screen.getResources().getString(id);}
+
     @Override
     protected void onPreExecute() {
         this.progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        this.progress.setMessage("Récupération des mises à jour, Patientez ...");
+        this.progress.setMessage(str(R.string.updateGetting));
         this.progress.setIndeterminate(true);
         this.progress.setCanceledOnTouchOutside(false);
-        this.progress.setCancelable(true);
+        this.progress.setCancelable(false);
         this.progress.show();
     }
 
@@ -116,12 +118,12 @@ public class NetworkLoop extends AsyncTask<Void, Void, String[]> {
                 final String maj = txtView.getText().toString();
 
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(screen);
-                alertDialogBuilder.setTitle("Confirmer");
+                alertDialogBuilder.setTitle(str(R.string.confirmation));
                 alertDialogBuilder.setIcon(R.drawable.ic_warning);
                 alertDialogBuilder
-                        .setMessage("Vous avez choisi la mise à jour du " + maj + "\n Voulez-vous la télécharger ?")
+                        .setMessage(String.format(str(R.string.updateMessage),maj))
                         .setCancelable(true)
-                        .setPositiveButton("Oui",
+                        .setPositiveButton(str(R.string.download),
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         String[] date_arr = maj.split("/");
@@ -136,7 +138,7 @@ public class NetworkLoop extends AsyncTask<Void, Void, String[]> {
                                     }
                                 })
 
-                        .setNegativeButton("Non", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(str(R.string.cancel), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
                             }

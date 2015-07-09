@@ -11,6 +11,10 @@ import com.nitorac.sygicdownloader.R;
 
 public class SettingsActivity extends PreferenceActivity {
 
+    public String str(int id){
+        return getResources().getString(id);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,8 +26,8 @@ public class SettingsActivity extends PreferenceActivity {
         Preference monthPref = getPreferenceScreen().findPreference("month");
         Preference yearPref = getPreferenceScreen().findPreference("year");
 
-        monthPref.setSummary("Entrez un mois entre 1 et 12\nMois de départ actuel : " + java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt(prefs.getString("month", "01"))));
-        yearPref.setSummary("Entrez une année depuis 2000\nAnnée de départ actuelle : " + java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt(prefs.getString("year", "2013"))));
+        monthPref.setSummary(str(R.string.monthPrefSummary) +" "+ java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt(prefs.getString("month", "01"))));
+        yearPref.setSummary(str(R.string.yearPrefSummary)+" "+ Integer.parseInt(prefs.getString("year", "2013")));
 
         monthPref.setOnPreferenceChangeListener(monthCheckListener);
         yearPref.setOnPreferenceChangeListener(yearCheckListener);
@@ -37,16 +41,16 @@ public class SettingsActivity extends PreferenceActivity {
             try{
                 Integer.parseInt((String)newValue);
             }catch(Exception e){
-                Toast.makeText(SettingsActivity.this, "Entrée invalide", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, str(R.string.invalidInput), Toast.LENGTH_SHORT).show();
                 return false;
             }
             int temp = Integer.parseInt((String)newValue);
             if (temp >= 1 && temp <= 12) {
-                pref.setSummary("Entrez un mois entre 1 et 12\nMois de départ actuel : " + java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt((String)newValue)));
+                pref.setSummary(str(R.string.monthPrefSummary) +" "+ java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt((String)newValue)));
                 return true;
             }
             // If now create a message to the user
-            Toast.makeText(SettingsActivity.this, "Mois hors-limite", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingsActivity.this, str(R.string.monthPrefOutBounds), Toast.LENGTH_SHORT).show();
             return false;
         }
     };
@@ -59,16 +63,16 @@ public class SettingsActivity extends PreferenceActivity {
             try{
                 Integer.parseInt((String)newValue);
             }catch(Exception e){
-                Toast.makeText(SettingsActivity.this, "Entrée invalide", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SettingsActivity.this, str(R.string.invalidInput), Toast.LENGTH_SHORT).show();
                 return false;
             }
             int temp = Integer.parseInt((String)newValue);
             if (temp >= 2000) {
-                pref.setSummary("Entrez une année depuis 2000\nAnnée de départ actuelle : " + java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt((String)newValue)));
+                pref.setSummary(str(R.string.yearPrefSummary)+" "+ Integer.parseInt((String) newValue));
                 return true;
             }
             // If now create a message to the user
-            Toast.makeText(SettingsActivity.this, "Année hors-limite", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingsActivity.this, str(R.string.yearPrefOutBounds), Toast.LENGTH_SHORT).show();
             return false;
         }
     };

@@ -24,7 +24,9 @@
         android:text="@string/start_all"
         android:layout_alignTop="@+id/button6"
         android:layout_alignLeft="@+id/doNotUseThis"
-        android:layout_alignStart="@+id/doNotUseThis" />
+        android:layout_alignStart="@+id/doNotUseThis"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:id="@+id/button6"

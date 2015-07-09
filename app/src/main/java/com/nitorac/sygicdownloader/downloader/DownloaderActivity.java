@@ -61,6 +61,16 @@ public class DownloaderActivity extends Activity {
 
     private String[] maj_list_down;
 
+    public String str(int id){
+        return getResources().getString(id);
+    }
+
+    public static String[] s = {"2dc","2dt","cam","hmp","lma","ne0","ne1","ne2","nhs","pak","pnm","poi","dbp"};
+
+    public String file(String ext){
+        return base_url + ext;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,7 +285,7 @@ public class DownloaderActivity extends Activity {
                             try {
                                 f.setWritable(true);
                                 boolean deleted = deleteDir(f);
-                                Log.i("AncMap", f.getName() + " supprimé" + " ! " + deleted);
+                                Log.i("AncMap", f.getName() + " deleted" + " ! " + deleted);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -298,19 +308,19 @@ public class DownloaderActivity extends Activity {
                     downloadId12 = downloadManager.add(downloadRequest12);
                     downloadId13 = downloadManager.add(downloadRequest13);
 
-                    mProgress1Txt.setText("Début | " + MainActivity.country_chosen + ".2dc" + " : Initialisation ...");
-                    mProgress2Txt.setText("Début | " + MainActivity.country_chosen + ".2dt" + " : Initialisation ...");
-                    mProgress3Txt.setText("Début | " + MainActivity.country_chosen + ".cam" + " : Initialisation ...");
-                    mProgress4Txt.setText("Début | " + MainActivity.country_chosen + ".hmp" + " : Initialisation ...");
-                    mProgress5Txt.setText("Début | " + MainActivity.country_chosen + ".lma" + " : Initialisation ...");
-                    mProgress6Txt.setText("Début | " + MainActivity.country_chosen + ".ne0" + " : Initialisation ...");
-                    mProgress7Txt.setText("Début | " + MainActivity.country_chosen + ".ne1" + " : Initialisation ...");
-                    mProgress8Txt.setText("Début | " + MainActivity.country_chosen + ".ne2" + " : Initialisation ...");
-                    mProgress9Txt.setText("Début | " + MainActivity.country_chosen + ".nhs" + " : Initialisation ...");
-                    mProgress10Txt.setText("Début | " + MainActivity.country_chosen + ".pak" + " : Initialisation ...");
-                    mProgress11Txt.setText("Début | " + MainActivity.country_chosen + ".pnm" + " : Initialisation ...");
-                    mProgress12Txt.setText("Début | " + MainActivity.country_chosen + ".poi" + " : Initialisation ...");
-                    mProgress13Txt.setText("Début | " + MainActivity.country_chosen + ".dbp" + " : Initialisation ...");
+                    mProgress1Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".2dc" + " : Initialisation ...");
+                    mProgress2Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".2dt" + " : Initialisation ...");
+                    mProgress3Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".cam" + " : Initialisation ...");
+                    mProgress4Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".hmp" + " : Initialisation ...");
+                    mProgress5Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".lma" + " : Initialisation ...");
+                    mProgress6Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".ne0" + " : Initialisation ...");
+                    mProgress7Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".ne1" + " : Initialisation ...");
+                    mProgress8Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".ne2" + " : Initialisation ...");
+                    mProgress9Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".nhs" + " : Initialisation ...");
+                    mProgress10Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".pak" + " : Initialisation ...");
+                    mProgress11Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".pnm" + " : Initialisation ...");
+                    mProgress12Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".poi" + " : Initialisation ...");
+                    mProgress13Txt.setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + ".dbp" + " : Initialisation ...");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
         <PreferenceCategory
-            android:summary="Réglages de la liste des mises à jour"
-            android:title="Liste des mises à jour" >
+            android:title="@string/prefUpdateDetectionTitle" >
             <EditTextPreference
                 android:key="month"
-                android:summary="Entrez un mois entre 1 et 12"
-                android:title="Mois" />
+                android:title="@string/month" />
             <EditTextPreference
                 android:key="year"
-                android:summary="Entrez une année depuis 1950"
-                android:title="Année" />
+                android:title="@string/year" />
         </PreferenceCategory>
 </PreferenceScreen>
