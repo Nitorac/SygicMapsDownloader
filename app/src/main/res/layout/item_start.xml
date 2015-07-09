@@ -12,8 +12,8 @@
         android:paddingLeft="5dp"
         android:text="test"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView">
+        android:layout_toRightOf="@+id/flag"
+        android:layout_toEndOf="@+id/flag">
     </TextView>
 
     <TextView
@@ -25,14 +25,14 @@
         android:textColor="@color/LightBlue"
         android:text="test"
         android:layout_below="@+id/label"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView">
+        android:layout_toRightOf="@+id/flag"
+        android:layout_toEndOf="@+id/flag">
     </TextView>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
+        android:id="@+id/flag"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

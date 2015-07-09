@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -133,17 +136,17 @@ public class MainActivity extends ActionBarActivity {
             try {
             country_chosen = data.getStringExtra("COUNTRY");
             Toast.makeText(this, "Pays : " + country_chosen, Toast.LENGTH_LONG).show();
-            int flagIcon = data.getIntExtra("FLAG", R.mipmap.ic_launcher);
+            Bitmap flagIcon = data.getParcelableExtra("FLAG");
             String name_country = data.getStringExtra("NAME");
 
             pass_country = name_country;
             pass_country_code = country_chosen;
-            pass_flag = flagIcon;
 
-            getSupportActionBar().setLogo(flagIcon);
+            getSupportActionBar().setLogo(new BitmapDrawable(getResources(), flagIcon));
             getSupportActionBar().setTitle("  " + name_country + " : Cartes Sygic");
             }catch(Exception e){
                 Toast.makeText(this,"Failed !",Toast.LENGTH_LONG).show();
+                e.printStackTrace();
                 failed=true;
             }
             if(!failed) {

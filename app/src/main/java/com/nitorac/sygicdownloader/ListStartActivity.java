@@ -13,6 +13,7 @@ import com.nitorac.sygicdownloader.liststartitems.ListStartAdapter;
 import com.nitorac.sygicdownloader.liststartitems.Arrays;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 /**
  * Created by Nitorac.
@@ -23,6 +24,12 @@ public class ListStartActivity extends ListActivity {
         otherCode();
 
         ListStartAdapter adapter = new ListStartAdapter(this, generateData());
+        adapter.sort(new Comparator<Items>() {
+            @Override
+            public int compare(Items lhs, Items rhs) {
+                return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        });
         setListAdapter(adapter);
     }
 
@@ -40,6 +47,6 @@ public class ListStartActivity extends ListActivity {
 
     @Override
     public void onListItemClick (ListView l, View v, int position, long id){
-        Toast.makeText(this, "Numero : " + position + "; Code : " + Arrays.country_code_eu[position], Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Numero : " + position + "; Code : " + Arrays.country_code_eu[(int)id], Toast.LENGTH_SHORT).show();
     }
 }

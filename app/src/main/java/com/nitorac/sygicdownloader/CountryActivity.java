@@ -3,9 +3,12 @@ package com.nitorac.sygicdownloader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.nitorac.sygicdownloader.liststartitems.Arrays;
 import com.nitorac.sygicdownloader.liststartitems.Items;
@@ -68,10 +71,20 @@ public class CountryActivity extends ListStartActivity {
 
     @Override
     public void onListItemClick (ListView l, View v, int position, long id){
+
+        TextView root_code = (TextView)v.findViewById(R.id.value);
+        String code = root_code.getText().toString();
+        String tempArray[] = code.split(" : ");
+
+        TextView title = (TextView)v.findViewById(R.id.label);
+        String label = title.getText().toString();
+
+        ImageView flag = (ImageView)v.findViewById(R.id.flag);
+
         Intent intent=new Intent();
-        intent.putExtra("COUNTRY", country_code[position]);
-        intent.putExtra("FLAG", flag[position]);
-        intent.putExtra("NAME", country[position]);
+        intent.putExtra("COUNTRY", tempArray[1]);
+        intent.putExtra("FLAG", ((BitmapDrawable)flag.getDrawable()).getBitmap());
+        intent.putExtra("NAME", label);
         setResult(2, intent);
         finish();
     }

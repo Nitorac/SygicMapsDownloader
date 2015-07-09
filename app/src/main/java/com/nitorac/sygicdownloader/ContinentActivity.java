@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nitorac.sygicdownloader.ListStartActivity;
@@ -36,8 +37,11 @@ public class ContinentActivity extends ListStartActivity{
 
         @Override
         public void onListItemClick (ListView l, View v, int position, long id){
+            TextView root_code = (TextView)v.findViewById(R.id.value);
+            String code = root_code.getText().toString();
+            String tempArray[] = code.split(" : ");
             Intent intent=new Intent();
-            intent.putExtra("CONTINENT", Arrays.continent_code[position]);
+            intent.putExtra("CONTINENT", tempArray[1]);
             setResult(2, intent);
             finish();
         }

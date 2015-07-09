@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Carte Sygic</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="cancel_all">Annuler le téléchargement</string>
+    <string name="title_activity_settings">Paramètres</string>
+    <string name="start_all">Commencer le téléchargement</string>
+    <string name="hello_world">Test</string>
+</resources>

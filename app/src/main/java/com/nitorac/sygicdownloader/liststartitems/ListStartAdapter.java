@@ -41,7 +41,7 @@ public class ListStartAdapter extends ArrayAdapter<Items> {
         // 3. Get the two text view from the rowView
         TextView labelView = (TextView) rowView.findViewById(R.id.label);
         TextView valueView = (TextView) rowView.findViewById(R.id.value);
-        ImageView flagView = (ImageView) rowView.findViewById(R.id.imageView);
+        ImageView flagView = (ImageView) rowView.findViewById(R.id.flag);
 
         // 4. Set the text for textView
         labelView.setText(itemsArrayList.get(position).getTitle());
