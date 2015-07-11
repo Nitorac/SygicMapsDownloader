@@ -1,18 +1,23 @@
 package com.nitorac.sygicdownloader;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,47 +34,209 @@ import java.util.ArrayList;
  */
 public class MainActivity extends ActionBarActivity {
 
+
     public static String continent_chosen = "";
     public static String country_chosen = "";
     public static String prefix = "";
+    public static String country_name_chosen = "null";
+    public static int flag_drawable_chosen = 0;
     public static int month_maj = 0;
     public static int year_maj = 0;
     public String[] maj_list;
 
-    public String pass_country;
-    public String pass_country_code;
+    public boolean hasConnectedWifi = false;
+    public boolean hasConnectedMobile = false;
 
     public ListView listView;
 
     public TextView lastMAJ;
-
+    public SharedPreferences prefs;
+    public SharedPreferences.Editor editor;
     public int txtMonth = 1;
     public int txtYear = 2013;
+
+    public String downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/SygicDownloader.apk";
+    public String downloadUrl = "http://electroteam.bl.ee/SygicDL/SygicDL.apk1";
+    public String checkUrl = "http://electroteam.bl.ee/SygicDL/version.txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = prefs.edit();
 
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        Bundle b = getIntent().getExtras();
+        if(b!=null){
+            b.getBoolean("returnSettings");
+        }
 
         txtMonth = Integer.parseInt(prefs.getString("month", "01"));
         txtYear = Integer.parseInt(prefs.getString("year", "2013"));
-
         listView = (ListView) findViewById(R.id.listView);
-
         lastMAJ = (TextView) findViewById(R.id.lastMaj);
 
-        Bundle b = getIntent().getExtras();
+        String dataConnection = prefs.getString("data", "null");
+        final String getCountry = prefs.getString("country", "null");
+        final String getCountryCode = prefs.getString("country_code", "null");
+        final String getContinent = prefs.getString("continent", "null");
+        final int getFlagDrawable = prefs.getInt("flag", 0);
+        final boolean getNoRecurrentDialog = prefs.getBoolean("countryNoRepeat", false);
+        final boolean getValueDialogYes = prefs.getBoolean("valueDialog", false);
+
         ActionBar actionBar = getSupportActionBar();
 
-            getContinent();
-            actionBar.setLogo(R.mipmap.ic_launcher);
+        haveNetworkConnection(dataConnection);
 
+        actionBar.setLogo(R.mipmap.ic_launcher);
+        actionBar.setTitle(" " + str(R.string.app_name));
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
+        if(!hasConnectedMobile && !hasConnectedWifi){
+            noConnectionDialog();
+        }else if(hasConnectedMobile && !hasConnectedWifi && dataConnection.equals("null")){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(str(R.string.noConnectionTitle));
+            alertDialogBuilder.setIcon(R.drawable.ic_data_connection);
+            alertDialogBuilder
+                    .setMessage(str(R.string.wifiMobileConnectionMsg))
+                    .setCancelable(false)
+                    .setNegativeButton(str(R.string.wifi),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    editor.putString("data", getResources().getStringArray(R.array.dataConnection)[1]);
+                                    editor.commit();
+                                    continueStuff(getCountry, getContinent, getCountryCode, getFlagDrawable, getNoRecurrentDialog, getValueDialogYes);
+                                }
+                            })
+                    .setPositiveButton(str(R.string.wifiOnly),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    editor.putString("data", getResources().getStringArray(R.array.dataConnection)[0]);
+                                    editor.commit();
+                                    if (!hasConnectedWifi) {
+                                        noConnectionDialog();
+                                    }else{
+                                        continueStuff(getCountry, getContinent, getCountryCode, getFlagDrawable, getNoRecurrentDialog, getValueDialogYes);
+                                    }
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }else if(hasConnectedWifi){
+            continueStuff(getCountry, getContinent, getCountryCode, getFlagDrawable, getNoRecurrentDialog, getValueDialogYes);
+        }
+
+
+    }
+
+    //TODO: Ajouter doNotAsk exit dans les paramètres
+    //TODO: Ajouter un module de mise à jour
+
+    public void continueStuff(String getCountry, String getContinent, String getCountryCode, int getFlagDrawable, boolean getNoRecurrentDialog, boolean getValueDialogYes){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Updater updater = new Updater(MainActivity.this);
+                updater.updaterMain(downloadDir, downloadUrl, checkUrl);
+            }
+        }).start();
+        if(!getCountry.equals("null") && !getContinent.equals("null") && !getCountryCode.equals("null") && getFlagDrawable != 0){
+            if(!getNoRecurrentDialog){
+                showCountryDialog(getCountry,getCountryCode,getContinent,getFlagDrawable);
+            }else{
+                if(getValueDialogYes) {
+                    country_chosen = getCountryCode;
+                    continent_chosen = getContinent;
+                    flag_drawable_chosen = getFlagDrawable;
+                    country_name_chosen = getCountry;
+                    getSupportActionBar().setLogo(getResources().getDrawable(getFlagDrawable));
+                    getSupportActionBar().setTitle(" " + getCountry + " : " + str(R.string.sygicMapTitle));
+                    finishedDetectionPart();
+                }else{
+                    getContinent();
+                }
+            }
+        }else{
+            getContinent();
+        }
+    }
+
+    public void showCountryDialog(final String country, final String country_code, final String continent, final int flag){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(str(R.string.countries));
+        alertDialogBuilder.setIcon(R.drawable.ic_countries);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.checkbox_dialog, null);
+        alertDialogBuilder
+                .setMessage(String.format(str(R.string.useSameCountry), country))
+                .setView(dialogView)
+                .setCancelable(false)
+                .setNegativeButton(str(R.string.no),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.doNotAskCheckBox);
+                                if (checkBox.isChecked()) {
+                                    editor.putBoolean("countryNoRepeat", true);
+                                    editor.putBoolean("valueDialog", false);
+                                }
+                                editor.commit();
+                                dialog.cancel();
+                                getContinent();
+                            }
+                        })
+                .setPositiveButton(str(R.string.yes),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                CheckBox checkBox = (CheckBox) dialogView.findViewById(R.id.doNotAskCheckBox);
+                                if (checkBox.isChecked()) {
+                                    editor.putBoolean("countryNoRepeat", true);
+                                    editor.putBoolean("valueDialog", true);
+                                }
+                                editor.commit();
+
+                                country_chosen = country_code;
+                                continent_chosen = continent;
+                                flag_drawable_chosen = flag;
+                                country_name_chosen = country;
+                                getSupportActionBar().setLogo(getResources().getDrawable(flag));
+                                getSupportActionBar().setTitle(" " + country + " : " + str(R.string.sygicMapTitle));
+                                finishedDetectionPart();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    public void noConnectionDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle(str(R.string.noConnectionTitle));
+        alertDialogBuilder.setIcon(R.drawable.ic_no_connection);
+        alertDialogBuilder
+                .setMessage(str(R.string.noConnection))
+                .setCancelable(false)
+                .setPositiveButton(str(R.string.quitTitle),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                moveTaskToBack(true);
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                                System.exit(1);
+                            }
+                        })
+                .setNegativeButton(str(R.string.resetConnection),
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                editor.remove("data");
+                                editor.commit();
+                                Intent i = new Intent(MainActivity.this, MainActivity.class);
+                                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(i);
+                                finish();
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     public void getContinent(){
@@ -85,6 +252,12 @@ public class MainActivity extends ActionBarActivity {
     public void setListAdapter(String[] maj){
         MajAdapter adapter = new MajAdapter(this, generateData(maj));
         listView.setAdapter(adapter);
+
+        editor.putString("country_code", country_chosen);
+        editor.putString("country", country_name_chosen);
+        editor.putInt("flag", flag_drawable_chosen);
+        editor.putString("continent", continent_chosen);
+        editor.commit();
     }
 
     //Regarder ListStartActivity pour exemple
@@ -99,6 +272,20 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return items;
+    }
+
+    private void haveNetworkConnection(String sharedPref) {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    hasConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    if(sharedPref.equals(getResources().getStringArray(R.array.dataConnection)[0]) || sharedPref.equals("null"))
+                        hasConnectedMobile = true;
+        }
     }
 
     public boolean checkBeforeAfter(int year, int month, int defYear, int defMonth) {
@@ -124,13 +311,11 @@ public class MainActivity extends ActionBarActivity {
         }else if(requestCode==2) {
             try {
             country_chosen = data.getStringExtra("COUNTRY");
-            Bitmap flagIcon = data.getParcelableExtra("FLAG");
             String name_country = data.getStringExtra("NAME");
-
-            pass_country = name_country;
-            pass_country_code = country_chosen;
-
-            getSupportActionBar().setLogo(new BitmapDrawable(getResources(), flagIcon));
+            int flagDrawable = data.getIntExtra("FLAG_DRAWABLE", 0);
+            flag_drawable_chosen = flagDrawable;
+            country_name_chosen = name_country;
+            getSupportActionBar().setLogo(getResources().getDrawable(flagDrawable));
             getSupportActionBar().setTitle(" " + name_country + " : " + str(R.string.sygicMapTitle));
             }catch(Exception e){
                 Toast.makeText(this,"Failed !",Toast.LENGTH_LONG).show();
@@ -138,10 +323,32 @@ public class MainActivity extends ActionBarActivity {
                 failed=true;
             }
             if(!failed) {
-                prefix = prefixReturn(country_chosen);
-                lastMaj();
-                new NetworkLoop(this).execute();
+                finishedDetectionPart();
             }
+        }
+    }
+
+    public void finishedDetectionPart(){
+        prefix = prefixReturn(country_chosen);
+        if(lastMaj()) {
+            new NetworkLoop(this).execute();
+        }else{
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+            alertDialogBuilder.setTitle(str(R.string.quitTitle));
+            alertDialogBuilder.setIcon(R.drawable.ic_action_name);
+            alertDialogBuilder
+                    .setMessage(str(R.string.noDirMap))
+                    .setCancelable(false)
+                    .setPositiveButton(str(R.string.quitTitle),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    moveTaskToBack(true);
+                                    android.os.Process.killProcess(android.os.Process.myPid());
+                                    System.exit(1);
+                                }
+                            });
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
         }
     }
 
@@ -179,19 +386,23 @@ public class MainActivity extends ActionBarActivity {
         }
     }
 
-    public void lastMaj(){
+    public boolean lastMaj(){
         String mapsDir = DownloaderActivity.sygicSearch() + "/Sygic/Maps";
         File mapsDirFiles = new File(mapsDir);
         ArrayList<String> results = new ArrayList<>();
         int i = 0;
         String[] arrayMaps;
 
-        for (File f : mapsDirFiles.listFiles()) {
-            if (f.getName().startsWith(country_chosen + "."+prefix+".")) {
-                arrayMaps = f.getName().split("\\.");
-                Log.i("DetectMap", f.getName() + " trouvée");
-                results.add(i, arrayMaps[3] + "/" + arrayMaps[2]);
-                i++;
+        if(!mapsDirFiles.exists()){
+            return false;
+        }else {
+            for (File f : mapsDirFiles.listFiles()) {
+                if (f.getName().startsWith(country_chosen + "." + prefix + ".")) {
+                    arrayMaps = f.getName().split("\\.");
+                    Log.i("DetectMap", f.getName() + " trouvée");
+                    results.add(i, arrayMaps[3] + "/" + arrayMaps[2]);
+                    i++;
+                }
             }
         }
         if(results.size() > 1){
@@ -207,6 +418,7 @@ public class MainActivity extends ActionBarActivity {
             month_maj = Integer.parseInt(maj[0]);
             year_maj = Integer.parseInt(maj[1]);
         }
+        return true;
     }
 
     @Override
@@ -261,6 +473,7 @@ public class MainActivity extends ActionBarActivity {
     public void onDestroy(){
         super.onDestroy();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

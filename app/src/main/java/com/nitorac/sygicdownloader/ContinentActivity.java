@@ -44,7 +44,7 @@ public class ContinentActivity extends ListActivity {
             Arrays array = new Arrays(c);
             ArrayList<Items> items = new ArrayList<Items>();
             for(int i = 0; i< array.continent.length;i++) {
-                items.add(new Items(array.continent[i], array.continent_code[i], fake));
+                items.add(new Items(array.continent[i], array.continent_code[i], fake, 0));
             }
             return items;
         }

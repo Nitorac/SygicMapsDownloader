@@ -9,4 +9,23 @@
                 android:key="year"
                 android:title="@string/year" />
         </PreferenceCategory>
+        <PreferenceCategory
+            android:title="@string/downloading">
+            <CheckBoxPreference
+                android:title="@string/autoDownload"
+                android:defaultValue="false"
+                android:summary="@string/startDownloadAuto"
+                android:key="startAutoDownload" />
+        </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/dataConnection">
+    <ListPreference
+        android:dialogTitle="@string/dataConnection"
+        android:key="data"
+        android:summary="@string/curModeData"
+        android:title="@string/dataConnectionTitle"
+        android:entries="@array/dataConnection"
+        android:entryValues="@array/dataConnection"
+        />
+    </PreferenceCategory>
 </PreferenceScreen>

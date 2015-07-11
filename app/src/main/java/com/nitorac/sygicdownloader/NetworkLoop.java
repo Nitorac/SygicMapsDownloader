@@ -7,9 +7,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.support.v7.app.AlertDialog.Builder;
 
 import com.nitorac.sygicdownloader.downloader.DownloaderActivity;
 
@@ -31,21 +33,35 @@ public class NetworkLoop extends AsyncTask<Void, Void, String[]> {
     public NetworkLoop(MainActivity ma) {
         this.screen = ma;
         this.progress = new ProgressDialog(this.screen);
+        this.alertDialogBuilder = new AlertDialog.Builder(this.screen);
     }
 
     private volatile MainActivity screen;
     private ProgressDialog progress;
+    private AlertDialog.Builder alertDialogBuilder;
+    private AlertDialog alertDialog;
 
     public String str(int id){return screen.getResources().getString(id);}
 
     @Override
     protected void onPreExecute() {
-        this.progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        this.progress.setMessage(str(R.string.updateGetting));
-        this.progress.setIndeterminate(true);
-        this.progress.setCanceledOnTouchOutside(false);
-        this.progress.setCancelable(false);
-        this.progress.show();
+        if(android.os.Build.VERSION.SDK_INT >= 11) {
+            this.progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            this.progress.setMessage(str(R.string.updateGetting));
+            this.progress.setIndeterminate(true);
+            this.progress.setCanceledOnTouchOutside(false);
+            this.progress.setCancelable(false);
+            this.progress.show();
+        }else {
+            LayoutInflater inflater = this.screen.getLayoutInflater();
+            final View dialogView = inflater.inflate(R.layout.process_dialog, null);
+            alertDialogBuilder.setTitle(str(R.string.pleaseWait));
+            alertDialogBuilder.setIcon(this.screen.getResources().getDrawable(R.drawable.ic_progress));
+            alertDialogBuilder.setView(dialogView);
+            alertDialogBuilder.setCancelable(false);
+            alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
     }
 
     @Override
@@ -108,7 +124,11 @@ public class NetworkLoop extends AsyncTask<Void, Void, String[]> {
 
     @Override
     protected void onPostExecute(String[] result) {
-        if(this.progress.isShowing()) this.progress.dismiss();
+        if(android.os.Build.VERSION.SDK_INT >= 11){
+            if(this.progress.isShowing()) this.progress.dismiss();
+        }else {
+            if (this.alertDialog.isShowing()) this.alertDialog.dismiss();
+        }
         this.screen.setListAdapter(result);
         this.screen.maj_list = result;
         this.screen.listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

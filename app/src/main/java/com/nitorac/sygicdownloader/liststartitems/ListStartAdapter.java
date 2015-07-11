@@ -47,6 +47,7 @@ public class ListStartAdapter extends ArrayAdapter<Items> {
         labelView.setText(itemsArrayList.get(position).getTitle());
         valueView.setText(context.getResources().getString(R.string.code) + " : " + itemsArrayList.get(position).getDescription());
         flagView.setImageBitmap(itemsArrayList.get(position).getFlag());
+        flagView.setTag(itemsArrayList.get(position).getFlag_drawable());
 
         // 5. retrn rowView
         return rowView;

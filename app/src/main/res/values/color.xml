@@ -8,4 +8,5 @@
     <color name="Blue">#ff128eeb</color>
     <color name="LightBlue">#ff5cc5ff</color>
     <color name="GreyNoFlash">#ffe7e7e7</color>
+    <color name="LightBlueCheckbox">#33b5e5</color>
 </resources>

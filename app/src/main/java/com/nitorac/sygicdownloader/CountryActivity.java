@@ -93,7 +93,7 @@ public class CountryActivity extends ListActivity {
     public ArrayList<Items> generateData(){
         ArrayList<Items> items = new ArrayList<Items>();
         for(int i = 0; i< country.length;i++) {
-            items.add(new Items(country[i], country_code[i], BitmapFactory.decodeResource(getResources(), flag[i])));
+            items.add(new Items(country[i], country_code[i], BitmapFactory.decodeResource(getResources(), flag[i]), flag[i]));
         }
         return items;
     }
@@ -112,7 +112,7 @@ public class CountryActivity extends ListActivity {
 
         Intent intent=new Intent();
         intent.putExtra("COUNTRY", tempArray[1]);
-        intent.putExtra("FLAG", ((BitmapDrawable)flag.getDrawable()).getBitmap());
+        intent.putExtra("FLAG_DRAWABLE", (int)flag.getTag());
         intent.putExtra("NAME", label);
         setResult(2, intent);
         finish();

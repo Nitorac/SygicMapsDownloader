@@ -1,17 +1,21 @@
 package com.nitorac.sygicdownloader.downloader;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nitorac.sygicdownloader.MainActivity;
 import com.nitorac.sygicdownloader.R;
@@ -40,12 +44,17 @@ public class DownloaderActivity extends Activity {
 
     int lastDownloadId;
 
+    public SharedPreferences prefs;
+    public SharedPreferences.Editor editor;
     private String month_usable;
     private String year_usable;
 
     public String str(int id){
         return getResources().getString(id);
     }
+
+    public static int[] txtviewids = {R.id.progressTxt1,R.id.progressTxt2,R.id.progressTxt3,R.id.progressTxt4,R.id.progressTxt5,R.id.progressTxt6,R.id.progressTxt7,R.id.progressTxt8,R.id.progressTxt9,R.id.progressTxt10,R.id.progressTxt11,R.id.progressTxt12,R.id.progressTxt13};
+    public static int[] progressbarids = {R.id.progress1,R.id.progress2,R.id.progress3,R.id.progress4,R.id.progress5,R.id.progress6,R.id.progress7,R.id.progress8,R.id.progress9,R.id.progress10,R.id.progress11,R.id.progress12,R.id.progress13};
 
     public static String[] s = {"2dc","2dt","cam","hmp","lma","ne0","ne1","ne2","nhs","pak","pnm","poi","dbp"};
 
@@ -60,40 +69,19 @@ public class DownloaderActivity extends Activity {
             year_usable = b.getString("year");
         }
 
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = prefs.edit();
+        boolean autoDownload = prefs.getBoolean("startAutoDownload", false);
         base_url = "http://cdn.sygic.com/in-app-data/maps/" + MainActivity.continent_chosen + "/" + MainActivity.prefix + "." + year_usable + "." + month_usable + "/" + MainActivity.country_chosen + "." + MainActivity.prefix + "." + year_usable + "." + month_usable + "/" + MainActivity.country_chosen + ".";
 
         mStartAll = (Button) findViewById(R.id.button5);
         mCancelAll = (Button) findViewById(R.id.button6);
 
 
-
-        mProgressTxt.add(0, (TextView) findViewById(R.id.progressTxt1));
-        mProgressTxt.add(1, (TextView) findViewById(R.id.progressTxt2));
-        mProgressTxt.add(2, (TextView) findViewById(R.id.progressTxt3));
-        mProgressTxt.add(3, (TextView) findViewById(R.id.progressTxt4));
-        mProgressTxt.add(4, (TextView) findViewById(R.id.progressTxt5));
-        mProgressTxt.add(5, (TextView) findViewById(R.id.progressTxt6));
-        mProgressTxt.add(6, (TextView) findViewById(R.id.progressTxt7));
-        mProgressTxt.add(7, (TextView) findViewById(R.id.progressTxt8));
-        mProgressTxt.add(8, (TextView) findViewById(R.id.progressTxt9));
-        mProgressTxt.add(9, (TextView) findViewById(R.id.progressTxt10));
-        mProgressTxt.add(10, (TextView) findViewById(R.id.progressTxt11));
-        mProgressTxt.add(11, (TextView) findViewById(R.id.progressTxt12));
-        mProgressTxt.add(12, (TextView) findViewById(R.id.progressTxt13));
-
-        mProgress.add(0, (ProgressBar) findViewById(R.id.progress1));
-        mProgress.add(1, (ProgressBar) findViewById(R.id.progress2));
-        mProgress.add(2, (ProgressBar) findViewById(R.id.progress3));
-        mProgress.add(3, (ProgressBar) findViewById(R.id.progress4));
-        mProgress.add(4, (ProgressBar) findViewById(R.id.progress5));
-        mProgress.add(5, (ProgressBar) findViewById(R.id.progress6));
-        mProgress.add(6, (ProgressBar) findViewById(R.id.progress7));
-        mProgress.add(7, (ProgressBar) findViewById(R.id.progress8));
-        mProgress.add(8, (ProgressBar) findViewById(R.id.progress9));
-        mProgress.add(9, (ProgressBar) findViewById(R.id.progress10));
-        mProgress.add(10, (ProgressBar) findViewById(R.id.progress11));
-        mProgress.add(11, (ProgressBar) findViewById(R.id.progress12));
-        mProgress.add(12, (ProgressBar) findViewById(R.id.progress13));
+        for(int i = 0;i<txtviewids.length;i++){
+            mProgressTxt.add(i, (TextView) findViewById(txtviewids[i]));
+            mProgress.add(i, (ProgressBar) findViewById(progressbarids[i]));
+        }
 
         for(int i = 0;i<mProgress.size();i++) {
             mProgress.get(i).setMax(100);
@@ -111,37 +99,27 @@ public class DownloaderActivity extends Activity {
 
         final File mapDir = new File(filesDir + "/" + MainActivity.country_chosen + "." + MainActivity.prefix + "." + year_usable + "." + month_usable);
 
-        mStartAll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    downloadManager.cancelAll();
+        for(int i = 0; i<mProgressTxt.size();i++) {
+            mProgressTxt.get(i).setText(str(R.string.waiting) + " | " + MainActivity.country_chosen + "." + s[i] + " : ...");
+        }
 
-                    for (File f : filesDirFile.listFiles()) {
-                        if (f.getName().startsWith(MainActivity.country_chosen + "." + MainActivity.prefix + ".")) {
-                            try {
-                                f.setWritable(true);
-                                boolean deleted = deleteDir(f);
-                                Log.i("AncMap", f.getName() + " deleted" + " ! " + deleted);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
+        Log.i("RootPath", sygicSearch());
 
-                    mapDir.mkdir();
-                    for(int i = 0;i<s.length;i++) {
-                        lastDownloadId = downloadManager.add(getDownloadRequest(i, filesDirFile));
-                    }
-                    for(int i = 0;i<mProgressTxt.size();i++) {
-                        mProgressTxt.get(i).setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + "." + s[i] + " : Initialisation ...");
-                    }
-                    } catch (Exception e) {
-                    e.printStackTrace();
+        if(!autoDownload) {
+            editor.putBoolean("startAutoDownload", false);
+            editor.commit();
+            mStartAll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mStartAll.setEnabled(false);
+                    startDownload(mapDir, filesDirFile);
                 }
-            }
-        });
-
+            });
+        }else{
+            mStartAll.setEnabled(false);
+            startDownload(mapDir, filesDirFile);
+            Toast.makeText(DownloaderActivity.this, str(R.string.downloadAuto), Toast.LENGTH_LONG).show();
+        }
         mCancelAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,11 +130,11 @@ public class DownloaderActivity extends Activity {
                 }
                 String errorMessage = str(R.string.downloadCanceled);
 
-                for(int i = 0;i<mProgressTxt.size();i++){
-                    mProgressTxt.get(i).setText(str(R.string.canceled) +" | " + MainActivity.country_chosen + "." + s[i] + " : " + errorMessage);
+                for (int i = 0; i < mProgressTxt.size(); i++) {
+                    mProgressTxt.get(i).setText(str(R.string.canceled) + " | " + MainActivity.country_chosen + "." + s[i] + " : " + errorMessage);
                     mProgressTxt.get(i).setTextColor(getResources().getColor(R.color.ErrorNormale));
                 }
-                for(int i = 0;i<mProgress.size();i++) {
+                for (int i = 0; i < mProgress.size(); i++) {
                     mProgress.get(i).setProgress(0);
                 }
 
@@ -167,12 +145,34 @@ public class DownloaderActivity extends Activity {
                 finish();
             }
         });
+    }
 
-        for(int i = 0; i<mProgressTxt.size();i++) {
-            mProgressTxt.get(i).setText(str(R.string.waiting) + " | " + MainActivity.country_chosen + "." + s[i] + " : ...");
+    public void startDownload(File mapDir, File filesDirFile){
+        try {
+            downloadManager.cancelAll();
+
+            for (File f : filesDirFile.listFiles()) {
+                if (f.getName().startsWith(MainActivity.country_chosen + "." + MainActivity.prefix + ".")) {
+                    try {
+                        f.setWritable(true);
+                        boolean deleted = deleteDir(f);
+                        Log.i("AncMap", f.getName() + " deleted" + " ! " + deleted);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            mapDir.mkdir();
+            for (int i = 0; i < s.length; i++) {
+                lastDownloadId = downloadManager.add(getDownloadRequest(i, filesDirFile));
+            }
+            for (int i = 0; i < mProgressTxt.size(); i++) {
+                mProgressTxt.get(i).setText(str(R.string.downloadStarting) + " | " + MainActivity.country_chosen + "." + s[i] + " : Initialisation ...");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-        Log.i("RootPath", sygicSearch());
     }
 
     public DownloadRequest getDownloadRequest(int boucle, File filesDirFile){
@@ -211,6 +211,21 @@ public class DownloaderActivity extends Activity {
         downloadManager.release();
     }
 
+    public void startNewActivity(Context context, String packageName) {
+        Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+        if (intent != null) {
+            // We found the activity now start the activity
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } else {
+            // Bring user to the market or let them choose an app?
+            intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setData(Uri.parse("market://details?id=" + packageName));
+            context.startActivity(intent);
+        }
+    }
+
     public static String sygicSearch() {
         File root_internal = new File(Environment.getExternalStorageDirectory().getPath());
         File root_internal_s = new File(Environment.getExternalStorageDirectory().getPath() + "/Sygic/Maps");
@@ -227,7 +242,7 @@ public class DownloaderActivity extends Activity {
             } else if (root_external_2_s.isDirectory()) {
                 return root_external_2.getPath();
             } else {
-                return "Error";
+                return root_internal.getPath();
             }
         }
     }
@@ -239,20 +254,19 @@ public class DownloaderActivity extends Activity {
         alertDialogBuilder
                 .setMessage(str(R.string.downloadSuccessMessage))
                 .setCancelable(false)
-                .setPositiveButton(str(R.string.quitTitle),
+                .setPositiveButton(str(R.string.startSygic),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                moveTaskToBack(true);
-                                android.os.Process.killProcess(android.os.Process.myPid());
-                                System.exit(1);
+                                startNewActivity(DownloaderActivity.this, "com.sygic.aura");
+                                finish();
                             }
                         })
 
-                .setNegativeButton(str(R.string.no), new DialogInterface.OnClickListener() {
+                .setNegativeButton(str(R.string.quitTitle), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent i = new Intent(DownloaderActivity.this, MainActivity.class);
-                        startActivity(i);
-                        dialog.dismiss();
+                        moveTaskToBack(true);
+                        android.os.Process.killProcess(android.os.Process.myPid());
+                        System.exit(1);
                     }
                 });
 

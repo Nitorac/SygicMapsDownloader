@@ -1,10 +1,15 @@
 package com.nitorac.sygicdownloader;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
+import android.preference.MultiSelectListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.nitorac.sygicdownloader.R;
@@ -25,12 +30,35 @@ public class SettingsActivity extends PreferenceActivity {
 
         Preference monthPref = getPreferenceScreen().findPreference("month");
         Preference yearPref = getPreferenceScreen().findPreference("year");
+        CheckBoxPreference autoDownloadPref = (CheckBoxPreference)getPreferenceScreen().findPreference("startAutoDownload");
+        ListPreference dataList = (ListPreference)getPreferenceScreen().findPreference("data");
 
         monthPref.setSummary(str(R.string.monthPrefSummary) +" "+ java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt(prefs.getString("month", "01"))));
-        yearPref.setSummary(str(R.string.yearPrefSummary)+" "+ Integer.parseInt(prefs.getString("year", "2013")));
+        yearPref.setSummary(str(R.string.yearPrefSummary) + " " + Integer.parseInt(prefs.getString("year", "2013")));
+        if(!prefs.getString("data", "null").equals("null")) {
+            dataList.setSummary(str(R.string.curModeData) + " " + getResources().getStringArray(R.array.dataConnection)[dataGetInt(prefs.getString("data", "null"))]);
+        }else{
+            dataList.setSummary(str(R.string.noConnectionMode));
+        }
+
+        if(prefs.getBoolean("startAutoDownload", false)){
+            autoDownloadPref.setChecked(true);
+        }else{
+            autoDownloadPref.setChecked(false);
+        }
 
         monthPref.setOnPreferenceChangeListener(monthCheckListener);
         yearPref.setOnPreferenceChangeListener(yearCheckListener);
+        dataList.setOnPreferenceChangeListener(dataListCheckListener);
+    }
+
+    public int dataGetInt(String str){
+        if(str.equals(getResources().getStringArray(R.array.dataConnection)[0])){
+            return 0;
+        }else if(str.equals(getResources().getStringArray(R.array.dataConnection)[1])){
+            return 1;
+        }
+        return -1;
     }
 
     Preference.OnPreferenceChangeListener monthCheckListener = new Preference.OnPreferenceChangeListener() {
@@ -46,7 +74,7 @@ public class SettingsActivity extends PreferenceActivity {
             }
             int temp = Integer.parseInt((String)newValue);
             if (temp >= 1 && temp <= 12) {
-                pref.setSummary(str(R.string.monthPrefSummary) +" "+ java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt((String)newValue)));
+                pref.setSummary(str(R.string.monthPrefSummary) +" "+ java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt((String) newValue)));
                 return true;
             }
             // If now create a message to the user
@@ -76,4 +104,26 @@ public class SettingsActivity extends PreferenceActivity {
             return false;
         }
     };
+
+    Preference.OnPreferenceChangeListener dataListCheckListener = new Preference.OnPreferenceChangeListener() {
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, Object newValue) {
+
+            if(newValue.equals(getResources().getStringArray(R.array.dataConnection)[1]) || newValue.equals(getResources().getStringArray(R.array.dataConnection)[0])){
+                pref.setSummary(str(R.string.curModeData) + " " + newValue);
+                return true;
+            }
+            Toast.makeText(SettingsActivity.this, str(R.string.invalidInput), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    };
+
+    @Override
+    public void onBackPressed(){
+        Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("returnSettings", true);
+        startActivity(i);
+        finish();
+    }
 }

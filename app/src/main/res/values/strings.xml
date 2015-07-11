@@ -34,11 +34,40 @@
     <string name="canceled">Canceled</string>
     <string name="downloadCanceled">Download canceled</string>
     <string name="downloadSuccess">Download finished</string>
-    <string name="downloadSuccessMessage">The download was completed successfully.\nDo you want to quit this app ?</string>
+    <string name="downloadSuccessMessage">The download was completed successfully.\nDo you want to start Sygic ?</string>
     <string name="no">No</string>
     <string name="finished">Successfully completed !</string>
     <string name="unexpectedError">Unexpected Error</string>
     <string name="expectedError">Expected error</string>
     <string name="commonCountries">, common for many countries</string>
+    <string name="noConnection">This application needs an Internet connection to work</string>
+    <string name="noConnectionTitle">Data Connection</string>
+    <string name="wifi">WiFi and Mobile Data</string>
+    <string name="mobileData">Data Mobile</string>
+    <string name="wifiMobileConnectionMsg">Do you want to use mobile data and wifi or only wifi ?</string>
+    <string name="wifiOnly">Only WiFi</string>
+    <string name="resetConnection">Reset connection setting</string>
+    <string name="doNotAskAgain">Do not ask again</string>
+    <string name="countries">Countries</string>
+    <string name="useSameCountry">Do you want to use last checked map (%s) ?</string>
+    <string name="yes">Yes</string>
+    <string name="startSygic">Start Sygic</string>
+    <string name="downloadAuto">Download started automatically</string>
+    <string name="downloading">Downloading</string>
+    <string name="autoDownload">Auto-Download</string>
+    <string name="startDownloadAuto">Start the download automatically</string>
+    <string name="noDirMap">No Sygic directory found.\nRelaunch this app when you have Sygic installed.</string>
+    <string name="pleaseWait">Please, Wait ...</string>
+    <string name="dataConnection">Mobile Data</string>
+    <string name="curModeData">Current connection mode :</string>
+    <string name="dataConnectionTitle">Connection mode</string>
+    <string name="noDefined">No defined</string>
+    <string name="noConnectionMode">No connection mode have been set</string>
+    <string name="downloadFileFrom">Downloading file to</string>
+    <string name="startingDownload">Starting download ...</string>
+    <string name="updateProgress">Downloaded %1$d Ko / %2$d Ko (%3$d%%)</string>
+    <string name="versionName" translatable="false">1.0</string>
+    <string name="updateTitle">Update</string>
+    <string name="updatePrgramMessage">An update is available ! \nCurrent version : %1$s\nNew version : %2$s\n\nDo you want to download it ?\n\n(Updates are really usefull)</string>
 
 </resources>
