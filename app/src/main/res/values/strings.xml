@@ -66,7 +66,7 @@
     <string name="downloadFileFrom">Downloading file to</string>
     <string name="startingDownload">Starting download ...</string>
     <string name="updateProgress">Downloaded %1$d Ko / %2$d Ko (%3$d%%)</string>
-    <string name="versionName" translatable="false">1.0</string>
+    <string name="versionName" translatable="false">1.1</string>
     <string name="updateTitle">Update</string>
     <string name="updatePrgramMessage">An update is available ! \nCurrent version : %1$s\nNew version : %2$s\n\nDo you want to download it ?\n\n(Updates are really usefull)</string>
 

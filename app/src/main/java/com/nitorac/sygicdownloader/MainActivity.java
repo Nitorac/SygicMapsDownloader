@@ -59,6 +59,8 @@ public class MainActivity extends ActionBarActivity {
     public String downloadUrl = "http://electroteam.bl.ee/SygicDL/SygicDL.apk1";
     public String checkUrl = "http://electroteam.bl.ee/SygicDL/version.txt";
 
+    public boolean checkMaj = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
 
         Bundle b = getIntent().getExtras();
         if(b!=null){
-            b.getBoolean("returnSettings");
+            checkMaj = b.getBoolean("checkMaj");
         }
 
         txtMonth = Integer.parseInt(prefs.getString("month", "01"));
@@ -132,16 +134,18 @@ public class MainActivity extends ActionBarActivity {
     }
 
     //TODO: Ajouter doNotAsk exit dans les paramètres
-    //TODO: Ajouter un module de mise à jour
+    //TODO: Ajouter un checkUpdate dans la preference activity
 
     public void continueStuff(String getCountry, String getContinent, String getCountryCode, int getFlagDrawable, boolean getNoRecurrentDialog, boolean getValueDialogYes){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Updater updater = new Updater(MainActivity.this);
-                updater.updaterMain(downloadDir, downloadUrl, checkUrl);
-            }
-        }).start();
+        if(checkMaj) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Updater updater = new Updater(MainActivity.this);
+                    updater.updaterMain(downloadDir, downloadUrl, checkUrl);
+                }
+            }).start();
+        }
         if(!getCountry.equals("null") && !getContinent.equals("null") && !getCountryCode.equals("null") && getFlagDrawable != 0){
             if(!getNoRecurrentDialog){
                 showCountryDialog(getCountry,getCountryCode,getContinent,getFlagDrawable);

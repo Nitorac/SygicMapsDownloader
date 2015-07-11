@@ -20,6 +20,8 @@ public class SettingsActivity extends PreferenceActivity {
         return getResources().getString(id);
     }
 
+    public boolean needMainActivityReload = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,7 @@ public class SettingsActivity extends PreferenceActivity {
             int temp = Integer.parseInt((String)newValue);
             if (temp >= 1 && temp <= 12) {
                 pref.setSummary(str(R.string.monthPrefSummary) +" "+ java.text.MessageFormat.format("{0,number,#00}", Integer.parseInt((String) newValue)));
+                needMainActivityReload = true;
                 return true;
             }
             // If now create a message to the user
@@ -97,6 +100,7 @@ public class SettingsActivity extends PreferenceActivity {
             int temp = Integer.parseInt((String)newValue);
             if (temp >= 2000) {
                 pref.setSummary(str(R.string.yearPrefSummary)+" "+ Integer.parseInt((String) newValue));
+                needMainActivityReload = true;
                 return true;
             }
             // If now create a message to the user
@@ -112,6 +116,7 @@ public class SettingsActivity extends PreferenceActivity {
 
             if(newValue.equals(getResources().getStringArray(R.array.dataConnection)[1]) || newValue.equals(getResources().getStringArray(R.array.dataConnection)[0])){
                 pref.setSummary(str(R.string.curModeData) + " " + newValue);
+                needMainActivityReload = true;
                 return true;
             }
             Toast.makeText(SettingsActivity.this, str(R.string.invalidInput), Toast.LENGTH_SHORT).show();
@@ -121,9 +126,13 @@ public class SettingsActivity extends PreferenceActivity {
 
     @Override
     public void onBackPressed(){
-        Intent i = new Intent(this, MainActivity.class);
-        i.putExtra("returnSettings", true);
-        startActivity(i);
-        finish();
+        if(needMainActivityReload) {
+            Intent i = new Intent(this, MainActivity.class);
+            i.putExtra("checkMaj", false);
+            startActivity(i);
+            finish();
+        }else{
+            finish();
+        }
     }
 }
