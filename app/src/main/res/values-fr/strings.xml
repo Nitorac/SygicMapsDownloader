@@ -67,4 +67,14 @@
     <string name="updateProgress">%1$d Ko / %2$d Ko téléchargé (%3$d%%)</string>
     <string name="updateTitle">Mise à jour</string>
     <string name="updatePrgramMessage">Une mise à jour est disponible ! \nVersion actuelle : %1$s\nNouvelle version : %2$s\n\nVoulez-vous la télécharger ?\n\n(Les mises à jour sont vraiment utiles)</string>
+    <string name="applicationPrefTitle">Application</string>
+    <string name="curVersion">Version actuelle de l\'application : v%s</string>
+    <string name="noUpdate">Aucune mise à jour</string>
+    <string name="noUpdateMessage">Aucune mise à jour disponible !</string>
+    <string name="ok">Ok</string>
+    <string name="delDoNotAsk">Annuler \"Ne pas redemander\"</string>
+    <string name="noDoNotAskPref">"Ne pas redemander" est désactivé</string>
+    <string name="foundDoNotAskAgainPref">"Ne pas redemander" est acitf</string>
+    <string name="desactivate">Désactiver</string>
+    <string name="doNotAskMessage">Voulez-vous vraiment supprimer le paramètre \"Ne pas redemander\" ?</string>
 </resources>

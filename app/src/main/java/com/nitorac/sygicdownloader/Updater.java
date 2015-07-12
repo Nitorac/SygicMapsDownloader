@@ -47,6 +47,8 @@ public class Updater {
     String curVersion;
     String newVersion;
 
+    boolean showNoUpdateDialog = false;
+
     public boolean isUpdateAvailable(String versionName){
         curVersion = str(R.string.versionName);
         newVersion = versionName;
@@ -68,7 +70,8 @@ public class Updater {
         return false;
     }
 
-    public void updaterMain(final String filePath, final String download_url, String check_url_txt){
+    public void updaterMain(final String filePath, final String download_url, String check_url_txt, boolean showNoUpdateDialog){
+        this.showNoUpdateDialog = showNoUpdateDialog;
         DetectUpdateTask dut = new DetectUpdateTask();
         dut.execute(filePath,download_url,check_url_txt);
     }
@@ -100,6 +103,21 @@ public class Updater {
                         }
                     });
 
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }else if(!isUpdateAvailable(versionName) && showNoUpdateDialog){
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(act);
+            alertDialogBuilder.setTitle(str(R.string.noUpdate));
+            alertDialogBuilder.setIcon(R.drawable.ic_no_update);
+            alertDialogBuilder
+                    .setMessage(str(R.string.noUpdateMessage))
+                    .setCancelable(false)
+                    .setPositiveButton(str(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
             AlertDialog alertDialog = alertDialogBuilder.create();
             alertDialog.show();
         }

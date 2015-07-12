@@ -69,5 +69,15 @@
     <string name="versionName" translatable="false">1.1</string>
     <string name="updateTitle">Update</string>
     <string name="updatePrgramMessage">An update is available ! \nCurrent version : %1$s\nNew version : %2$s\n\nDo you want to download it ?\n\n(Updates are really usefull)</string>
+    <string name="applicationPrefTitle">Application</string>
+    <string name="curVersion">Current application version : v%s</string>
+    <string name="noUpdate">No update</string>
+    <string name="noUpdateMessage">No update available !</string>
+    <string name="ok">Ok</string>
+    <string name="delDoNotAsk">Cancel \"Do no ask again\"</string>
+    <string name="noDoNotAskPref">"Do not ask again" is desactivated</string>
+    <string name="foundDoNotAskAgainPref">"Do not ask again" is activated</string>
+    <string name="desactivate">Desactivate</string>
+    <string name="doNotAskMessage">Do you really want to delete the \"Do not ask again\" setting ?</string>
 
 </resources>

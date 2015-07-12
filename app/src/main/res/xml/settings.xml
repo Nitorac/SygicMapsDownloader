@@ -28,4 +28,14 @@
         android:entryValues="@array/dataConnection"
         />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/applicationPrefTitle">
+    <Preference
+        android:key="ignore"
+        android:title="@string/updateTitle" />
+    <Preference
+        android:key="ignore2"
+        android:title="@string/delDoNotAsk"
+        android:summary="Multi line description\ncan go here."/>
+    </PreferenceCategory>
 </PreferenceScreen>

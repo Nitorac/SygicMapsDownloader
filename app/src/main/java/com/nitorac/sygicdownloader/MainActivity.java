@@ -55,9 +55,9 @@ public class MainActivity extends ActionBarActivity {
     public int txtMonth = 1;
     public int txtYear = 2013;
 
-    public String downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/SygicDownloader.apk";
-    public String downloadUrl = "http://electroteam.bl.ee/SygicDL/SygicDL.apk1";
-    public String checkUrl = "http://electroteam.bl.ee/SygicDL/version.txt";
+    public static String downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath() + "/SygicDownloader.apk";
+    public static String downloadUrl = "http://electroteam.bl.ee/SygicDL/SygicDL.apk1";
+    public static String checkUrl = "http://electroteam.bl.ee/SygicDL/version.txt";
 
     public boolean checkMaj = true;
 
@@ -134,7 +134,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
     //TODO: Ajouter doNotAsk exit dans les paramètres
-    //TODO: Ajouter un checkUpdate dans la preference activity
 
     public void continueStuff(String getCountry, String getContinent, String getCountryCode, int getFlagDrawable, boolean getNoRecurrentDialog, boolean getValueDialogYes){
         if(checkMaj) {
@@ -142,7 +141,7 @@ public class MainActivity extends ActionBarActivity {
                 @Override
                 public void run() {
                     Updater updater = new Updater(MainActivity.this);
-                    updater.updaterMain(downloadDir, downloadUrl, checkUrl);
+                    updater.updaterMain(downloadDir, downloadUrl, checkUrl, false);
                 }
             }).start();
         }
